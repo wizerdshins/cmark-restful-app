@@ -14,6 +14,10 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
 
+    /*
+    TODO create separate imports
+     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;

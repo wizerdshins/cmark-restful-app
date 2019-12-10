@@ -1,6 +1,5 @@
 package com.wizerdshins.adminpanel.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -27,9 +26,4 @@ public class Role {
             mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
-
-//    @Override
-//    public String toString() {
-//        return String.valueOf(id);
-//    }
 }

@@ -1,6 +1,7 @@
 package com.wizerdshins.adminpanel.controller;
 
 import com.wizerdshins.adminpanel.domain.User;
+import com.wizerdshins.adminpanel.domain.dto.UserDto;
 import com.wizerdshins.adminpanel.repository.UserRepository;
 import com.wizerdshins.adminpanel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,13 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public List<User> getAll() {
-        return userService.findAll();
+    public List<UserDto> getAll() {
+        return userService.findAllUsers();
     }
 
     @GetMapping("{id}")
-    public User getById(@PathVariable("id") User user) {
-        return user;
+    public UserDto getById(@PathVariable("id") Long id) {
+        return userService.findUserById(id);
     }
 
     /*

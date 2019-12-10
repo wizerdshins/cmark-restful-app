@@ -1,6 +1,7 @@
 package com.wizerdshins.adminpanel.service;
 
 import com.wizerdshins.adminpanel.domain.User;
+import com.wizerdshins.adminpanel.domain.dto.UserDto;
 import com.wizerdshins.adminpanel.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDto> findAllUsers() {
+        return userRepository.findAllUsers();
+    }
+
+    public UserDto findUserById(Long id) {
+        return userRepository.findUserById(id);
     }
 
     public User create(User user) {
         return userRepository.save(user);
     }
 
-    /*
-    add ignore properties
-     */
     public User update(User persistUser, User updatedUser) {
         BeanUtils.copyProperties(updatedUser, persistUser, "id");
         return userRepository.save(persistUser);
