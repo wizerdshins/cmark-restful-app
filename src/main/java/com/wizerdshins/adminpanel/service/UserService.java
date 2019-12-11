@@ -1,7 +1,9 @@
 package com.wizerdshins.adminpanel.service;
 
+import com.wizerdshins.adminpanel.domain.Role;
 import com.wizerdshins.adminpanel.domain.User;
 import com.wizerdshins.adminpanel.domain.dto.UserDto;
+import com.wizerdshins.adminpanel.repository.RoleRepository;
 import com.wizerdshins.adminpanel.repository.UserRepository;
 
 import org.springframework.beans.BeanUtils;

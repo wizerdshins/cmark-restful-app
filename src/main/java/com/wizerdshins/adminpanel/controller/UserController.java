@@ -3,6 +3,7 @@ package com.wizerdshins.adminpanel.controller;
 import com.wizerdshins.adminpanel.domain.User;
 import com.wizerdshins.adminpanel.domain.dto.ResultValidation;
 import com.wizerdshins.adminpanel.domain.dto.UserDto;
+import com.wizerdshins.adminpanel.repository.RoleRepository;
 import com.wizerdshins.adminpanel.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class UserController {
     @PostMapping("/add")
     public ResponseEntity<ResultValidation> create(@Valid @RequestBody User newUser,
                                                    BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(new ResultValidation(
                     false, bindingResult.getFieldErrors()), HttpStatus.BAD_REQUEST);

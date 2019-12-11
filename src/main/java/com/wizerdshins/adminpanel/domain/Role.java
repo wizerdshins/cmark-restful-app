@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Entity
@@ -13,22 +11,30 @@ import java.util.Set;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @JsonIgnore
     private Long id;
     @Column
     private String name;
 
-    @JsonIgnore
+//    @JsonIgnore
 //    @ManyToMany(fetch = FetchType.EAGER,
 //            cascade = {
-//            CascadeType.PERSIST, CascadeType.MERGE
+//            CascadeType.MERGE, CascadeType.PERSIST
 //            },
 //            mappedBy = "roles")
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = {
-            CascadeType.MERGE, CascadeType.PERSIST
-            },
-            mappedBy = "roles")
-    private Set<User> users = new HashSet<>();
+//    private Set<User> users = new HashSet<>();
+
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = {@JoinColumn(name = "roles_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
+    )
+
+    @Override
+    public String toString() {
+        return "Id: " + id +
+                ", name: " + name;
+    }
 
 }
