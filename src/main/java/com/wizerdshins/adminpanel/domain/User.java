@@ -3,12 +3,11 @@ package com.wizerdshins.adminpanel.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +31,10 @@ public class User {
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade =
+                    {CascadeType.MERGE, CascadeType.PERSIST}
+            )
     @JoinTable(
             name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id")},

@@ -1,18 +1,18 @@
 package com.wizerdshins.adminpanel.controller;
 
 import com.wizerdshins.adminpanel.domain.User;
+import com.wizerdshins.adminpanel.domain.dto.ResultValidation;
 import com.wizerdshins.adminpanel.domain.dto.UserDto;
 import com.wizerdshins.adminpanel.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/panel")
@@ -35,38 +35,29 @@ public class UserController {
         return userService.findUserById(id);
     }
 
-    /*
-    add validation
-     */
-//    @PostMapping("/add")
-//    public User create(@RequestBody User newUser) {
-//        return userService.create(newUser);
-//    }
-
     @PostMapping("/add")
-    public Map<Boolean, List<FieldError>> create(@Valid @RequestBody User newUser,
-                                 BindingResult bindingResult) {
-
-        Map<Boolean, List<FieldError>> validationResult = new LinkedHashMap<>();
-        boolean status = false;
+    public ResponseEntity<ResultValidation> create(@Valid @RequestBody User newUser,
+                                                   BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            validationResult.put(status, bindingResult.getFieldErrors());
-            return validationResult;
+            return new ResponseEntity<>(new ResultValidation(
+                    false, bindingResult.getFieldErrors()), HttpStatus.BAD_REQUEST);
         }
-        status = true;
-        validationResult.put(status, null);
         userService.create(newUser);
-        return validationResult;
+        return new ResponseEntity<>(new ResultValidation(true), HttpStatus.OK);
     }
 
-    /*
-    add validation
-     */
-
     @PutMapping("update/{id}")
-    public User update(@PathVariable("id") User persistUser,
-                       @RequestBody User updatedUser) {
-        return userService.update(persistUser, updatedUser);
+    public ResponseEntity<ResultValidation> update(
+            @PathVariable("id") User persistUser,
+            @Valid @RequestBody User updatedUser,
+            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(new ResultValidation(
+                    false, bindingResult.getFieldErrors()), HttpStatus.BAD_REQUEST);
+        }
+        userService.update(persistUser, updatedUser);
+        return new ResponseEntity<>(new ResultValidation(true), HttpStatus.OK);
     }
 
     @DeleteMapping("delete/{id}")

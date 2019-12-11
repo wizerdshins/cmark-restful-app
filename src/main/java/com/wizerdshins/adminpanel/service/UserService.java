@@ -3,9 +3,11 @@ package com.wizerdshins.adminpanel.service;
 import com.wizerdshins.adminpanel.domain.User;
 import com.wizerdshins.adminpanel.domain.dto.UserDto;
 import com.wizerdshins.adminpanel.repository.UserRepository;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,6 +38,7 @@ public class UserService {
         return userRepository.save(persistUser);
     }
 
+    @Transactional
     public void delete(User user) {
         userRepository.delete(user);
     }

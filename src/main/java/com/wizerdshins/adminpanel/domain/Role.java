@@ -19,9 +19,14 @@ public class Role {
     private String name;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
+//    @ManyToMany(fetch = FetchType.EAGER,
+//            cascade = {
+//            CascadeType.PERSIST, CascadeType.MERGE
+//            },
+//            mappedBy = "roles")
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
-            CascadeType.PERSIST, CascadeType.MERGE
+            CascadeType.MERGE, CascadeType.PERSIST
             },
             mappedBy = "roles")
     private Set<User> users = new HashSet<>();
