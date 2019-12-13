@@ -1,7 +1,9 @@
 package com.wizerdshins.adminpanel.controller;
 
+import com.wizerdshins.adminpanel.domain.Role;
 import com.wizerdshins.adminpanel.domain.User;
 import com.wizerdshins.adminpanel.domain.dto.ResultValidation;
+import com.wizerdshins.adminpanel.domain.dto.RoleCheck;
 import com.wizerdshins.adminpanel.domain.dto.UserDto;
 import com.wizerdshins.adminpanel.repository.RoleRepository;
 import com.wizerdshins.adminpanel.service.UserService;
@@ -20,10 +22,16 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    private RoleRepository roleRepository;
+
+    private RoleCheck roleCheck;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService,
+                          RoleRepository roleRepository) {
         this.userService = userService;
+        this.roleRepository = roleRepository;
+        roleCheck = new RoleCheck();
     }
 
     @GetMapping("/list")
@@ -42,10 +50,25 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(new ResultValidation(
-                    false, bindingResult.getFieldErrors()), HttpStatus.BAD_REQUEST);
+                    false, bindingResult.getFieldErrors()),
+                    HttpStatus.BAD_REQUEST);
         }
+
+        Role role = null;
+        if (!newUser.getRoles().isEmpty()) {
+            for (Role item : newUser.getRoles()) {
+                role = item;
+                if (!roleCheck.getRolesIdentification().contains(item.getId())) {
+                    return new ResponseEntity<>(new ResultValidation(
+                            false, "Role ID must be between in 1-3 numbers!"),
+                            HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+
         userService.create(newUser);
-        return new ResponseEntity<>(new ResultValidation(true), HttpStatus.OK);
+        return new ResponseEntity<>(new ResultValidation(true),
+                HttpStatus.OK);
     }
 
     @PutMapping("update/{id}")
@@ -56,10 +79,27 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(new ResultValidation(
-                    false, bindingResult.getFieldErrors()), HttpStatus.BAD_REQUEST);
+                    false, bindingResult.getFieldErrors()),
+                    HttpStatus.BAD_REQUEST);
         }
+
+        if (!updatedUser.getRoles().isEmpty()) {
+            for (Role item : updatedUser.getRoles()) {
+                if (!roleCheck.getRolesIdentification().contains(item.getId())) {
+                    return new ResponseEntity<>(new ResultValidation(
+                            false, "Role ID must be between in 1-3 numbers!"),
+                            HttpStatus.BAD_REQUEST);
+                } else if (item.getName() == null) {
+                    return new ResponseEntity<>(new ResultValidation(
+                            false, "Please, enter a role's name!"),
+                            HttpStatus.BAD_REQUEST);
+                }
+            }
+        }
+
         userService.update(persistUser, updatedUser);
-        return new ResponseEntity<>(new ResultValidation(true), HttpStatus.OK);
+        return new ResponseEntity<>(new ResultValidation(true),
+                HttpStatus.OK);
     }
 
     @DeleteMapping("delete/{id}")

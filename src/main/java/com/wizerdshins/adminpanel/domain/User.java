@@ -18,7 +18,12 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+            name = "userSequence",
+            sequenceName = "JPA_SEQUENCE",
+            allocationSize = 1, initialValue = 4 // value was hardcoded in bd
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userSequence")
     private Long id;
     @Column
     @NotBlank(message = "Please, enter a login")
@@ -33,12 +38,12 @@ public class User {
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade =
-                    {CascadeType.MERGE, CascadeType.PERSIST}
+                    {CascadeType.MERGE}
             )
     @JoinTable(
             name = "user_roles",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")}
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false, updatable = false)}
     )
     private Set<Role> roles = new HashSet<>();
 

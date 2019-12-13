@@ -12,6 +12,7 @@ public class ResultValidation {
 
     private Boolean success;
     List<FieldError> errors;
+    private String reason;
 
     public ResultValidation(Boolean success) {
         this.success = success;
@@ -21,5 +22,10 @@ public class ResultValidation {
                             List<FieldError> errors) {
         this.success = success;
         this.errors = errors;
+    }
+
+    public ResultValidation(Boolean success, String reason) {
+        this.success = success;
+        this.reason = reason;
     }
 }
