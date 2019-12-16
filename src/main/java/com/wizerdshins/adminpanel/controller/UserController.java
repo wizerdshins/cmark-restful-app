@@ -54,10 +54,8 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        Role role = null;
         if (!newUser.getRoles().isEmpty()) {
             for (Role item : newUser.getRoles()) {
-                role = item;
                 if (!roleCheck.getRolesIdentification().contains(item.getId())) {
                     return new ResponseEntity<>(new ResultValidation(
                             false, "Role ID must be between in 1-3 numbers!"),

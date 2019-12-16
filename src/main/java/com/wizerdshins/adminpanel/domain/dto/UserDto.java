@@ -3,6 +3,7 @@ package com.wizerdshins.adminpanel.domain.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wizerdshins.adminpanel.domain.Role;
 import com.wizerdshins.adminpanel.domain.User;
+
 import lombok.Data;
 
 import java.util.Set;

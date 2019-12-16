@@ -42,8 +42,12 @@ public class User {
             )
     @JoinTable(
             name = "user_roles",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false, updatable = false)}
+            joinColumns = {
+                    @JoinColumn(name = "user_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "role_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)}
     )
     private Set<Role> roles = new HashSet<>();
 
