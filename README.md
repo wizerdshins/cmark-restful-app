@@ -9,4 +9,4 @@ Build application using Maven command
 
 in project's root directory.
 
-To get to know the description of all methods, please click [here.](http://)
+To get to know the description of all methods, please click [here.](https://github.com/wizerdshins/cmark-restful-app/blob/master/description.md)
