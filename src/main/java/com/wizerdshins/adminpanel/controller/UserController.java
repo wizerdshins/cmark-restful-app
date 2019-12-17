@@ -2,10 +2,9 @@ package com.wizerdshins.adminpanel.controller;
 
 import com.wizerdshins.adminpanel.domain.Role;
 import com.wizerdshins.adminpanel.domain.User;
-import com.wizerdshins.adminpanel.domain.dto.ResultValidation;
-import com.wizerdshins.adminpanel.domain.dto.RoleCheck;
+import com.wizerdshins.adminpanel.util.ResultValidation;
+import com.wizerdshins.adminpanel.util.RoleCheck;
 import com.wizerdshins.adminpanel.domain.dto.UserDto;
-import com.wizerdshins.adminpanel.repository.RoleRepository;
 import com.wizerdshins.adminpanel.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +21,12 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
-    private RoleRepository roleRepository;
 
     private RoleCheck roleCheck;
 
     @Autowired
-    public UserController(UserService userService,
-                          RoleRepository roleRepository) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
         roleCheck = new RoleCheck();
     }
 
@@ -56,9 +52,14 @@ public class UserController {
 
         if (!newUser.getRoles().isEmpty()) {
             for (Role item : newUser.getRoles()) {
-                if (!roleCheck.getRolesIdentification().contains(item.getId())) {
+                if (!roleCheck.isCorrectRoleId(item)) {
                     return new ResponseEntity<>(new ResultValidation(
                             false, "Role ID must be between in 1-3 numbers!"),
+                            HttpStatus.BAD_REQUEST);
+                } else if (item.getName() != null && !roleCheck.isCorrectInput(item)) {
+                    return new ResponseEntity<>(new ResultValidation(
+                            false, "Role ID " + item.getId() +
+                            " doesn't match with role name!"),
                             HttpStatus.BAD_REQUEST);
                 }
             }
@@ -83,13 +84,18 @@ public class UserController {
 
         if (!updatedUser.getRoles().isEmpty()) {
             for (Role item : updatedUser.getRoles()) {
-                if (!roleCheck.getRolesIdentification().contains(item.getId())) {
+                if (!roleCheck.isCorrectRoleId(item)) {
                     return new ResponseEntity<>(new ResultValidation(
                             false, "Role ID must be between in 1-3 numbers!"),
                             HttpStatus.BAD_REQUEST);
-                } else if (item.getName() == null) {
+                } else if (item.getName() == null || !roleCheck.isCorrectRoleName(item)) {
                     return new ResponseEntity<>(new ResultValidation(
-                            false, "Please, enter a role's name!"),
+                            false, "Please, enter a correct role's name!"),
+                            HttpStatus.BAD_REQUEST);
+                } else if (!roleCheck.isCorrectInput(item)) {
+                    return new ResponseEntity<>(new ResultValidation(
+                            false, "Role ID " + item.getId() +
+                            " doesn't match with role name!"),
                             HttpStatus.BAD_REQUEST);
                 }
             }

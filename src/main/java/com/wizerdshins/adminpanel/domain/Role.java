@@ -1,19 +1,19 @@
 package com.wizerdshins.adminpanel.domain;
 
-import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Objects;
 
-@Data
 @Entity
 @Table(name = "roles")
 public class Role {
 
     @Id
-    private Long id;
+    private Integer id;
     @Column
     private String name;
 
+    public Role() {}
 
     @JoinTable(
             name = "user_roles",
@@ -25,10 +25,39 @@ public class Role {
                             nullable = false, updatable = false)}
     )
 
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "Id: " + id +
                 ", name: " + name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equals(getId(), role.getId()) &&
+                Objects.equals(getName(), role.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName());
+    }
 }

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<Role, Integer> {
 
     @Query("from Role r where r.id = :id")
-    Role findRoleById(@Param("id") Long id);
+    Role findRoleById(@Param("id") Integer id);
 
 }

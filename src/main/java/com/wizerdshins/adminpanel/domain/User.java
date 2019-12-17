@@ -1,18 +1,15 @@
 package com.wizerdshins.adminpanel.domain;
 
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@Data
-@EqualsAndHashCode(exclude = "roles")
 @Entity
 @Table(name = "users")
 public class User {
@@ -36,10 +33,7 @@ public class User {
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade =
-                    {CascadeType.MERGE}
-            )
+
     @JoinTable(
             name = "user_roles",
             joinColumns = {
@@ -49,6 +43,69 @@ public class User {
                     @JoinColumn(name = "role_id", referencedColumnName = "id",
                             nullable = false, updatable = false)}
     )
+
+    @OneToMany(fetch = FetchType.EAGER,
+            cascade =
+                    {CascadeType.MERGE}
+    )
     private Set<Role> roles = new HashSet<>();
 
+    public User() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(getId(), user.getId()) &&
+                Objects.equals(getLogin(), user.getLogin()) &&
+                Objects.equals(getName(), user.getName()) &&
+                Objects.equals(getPassword(), user.getPassword()) &&
+                Objects.equals(getRoles(), user.getRoles());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getLogin(), getName(), getPassword(), getRoles());
+    }
 }

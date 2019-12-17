@@ -1,4 +1,4 @@
-package com.wizerdshins.adminpanel.domain.dto;
+package com.wizerdshins.adminpanel.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
